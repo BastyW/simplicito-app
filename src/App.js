@@ -1,14 +1,29 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
+import ProjectManager from './project-manager.tsx';
 import { HotTable } from "@handsontable/react";
 import { registerAllModules } from 'handsontable/registry';
 import "handsontable/dist/handsontable.full.css";
 import { registerLanguageDictionary, esMX } from "handsontable/i18n";
-
 registerAllModules();
 registerLanguageDictionary(esMX);
 
 function App() {
+  return (
+    <Router>
+      <nav>
+        <Link to="/">Hoja de Cálculo</Link> | <Link to="/projects">Proyectos</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Spreadsheet />} />
+        <Route path="/projects" element={<ProjectManager />} />
+      </Routes>
+    </Router>
+  );
+}
+
+function Spreadsheet() {
   const hotTableComponent = React.useRef(null);
 
   const generarEncabezadosAlfabeticos = (numColumnas) => {
