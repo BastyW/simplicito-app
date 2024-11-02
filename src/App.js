@@ -33,7 +33,7 @@ function App() {
 
   const cargarEncabezados = () => {
     const encabezadosGuardados = localStorage.getItem("encabezadosHojaCalculo");
-    return encabezadosGuardados ? JSON.parse(encabezadosGuardados) : generarEncabezadosAlfabeticos(8); // Genera encabezados por defecto
+    return encabezadosGuardados ? JSON.parse(encabezadosGuardados) : generarEncabezadosAlfabeticos(8);
   };
 
   const [datos, setDatos] = React.useState(cargarDatos);
@@ -45,6 +45,18 @@ function App() {
     localStorage.setItem("encabezadosHojaCalculo", JSON.stringify(encabezados));
   }, [datos, encabezados]);
 
+  const resolverExpresionConNombres = (expresion) => {
+    const regex = /([A-Z]+)(\d+)/g; // Regex para encontrar referencias de celdas
+    return expresion.replace(regex, (match, col, row) => {
+      const colIndex = encabezados.findIndex(header => header === col); // Buscar el índice basado en el nombre del encabezado
+      const rowIndex = parseInt(row) - 1; // Convertir fila a índice
+      if (datos[rowIndex] && datos[rowIndex][colIndex] !== undefined) {
+        return datos[rowIndex][colIndex] || 0; // Devuelve el valor o 0 si está vacío
+      }
+      return 0;
+    });
+  };
+
   const handleAfterChange = (changes) => {
     if (changes) {
       const nuevosDatos = [...datos];
@@ -52,7 +64,18 @@ function App() {
         if (!nuevosDatos[row]) {
           nuevosDatos[row] = [];
         }
-        nuevosDatos[row][col] = newValue;
+        
+        // Evaluar la expresión
+        if (typeof newValue === 'string' && newValue.match(/^[0-9+\-*/()\sA-Z]+$/)) {
+          try {
+            const expresionResuelta = resolverExpresionConNombres(newValue);
+            nuevosDatos[row][col] = eval(expresionResuelta);
+          } catch (error) {
+            nuevosDatos[row][col] = 'Error'; // Manejo de errores
+          }
+        } else {
+          nuevosDatos[row][col] = newValue; // Mantener el valor original si no es expresión
+        }
       });
       setDatos(nuevosDatos);
     }
@@ -89,7 +112,7 @@ function App() {
   // Manejar cambio en los encabezados
   const manejarCambioEncabezado = (index, nuevoTitulo) => {
     const nuevosEncabezados = [...encabezados];
-    nuevosEncabezados[index] = nuevoTitulo;
+    nuevosEncabezados[index] = nuevoTitulo.toUpperCase();
     setEncabezados(nuevosEncabezados);
   };
 
