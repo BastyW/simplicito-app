@@ -46,12 +46,12 @@ function App() {
   }, [datos, encabezados]);
 
   const resolverExpresionConNombres = (expresion) => {
-    const regex = /([A-Z]+)(\d+)/g; // Regex para encontrar referencias de celdas
+    const regex = /([A-Z]+)(\d+)/g; 
     return expresion.replace(regex, (match, col, row) => {
-      const colIndex = encabezados.findIndex(header => header === col); // Buscar el índice basado en el nombre del encabezado
-      const rowIndex = parseInt(row) - 1; // Convertir fila a índice
+      const colIndex = encabezados.findIndex(header => header === col);
+      const rowIndex = parseInt(row) - 1;
       if (datos[rowIndex] && datos[rowIndex][colIndex] !== undefined) {
-        return datos[rowIndex][colIndex] || 0; // Devuelve el valor o 0 si está vacío
+        return datos[rowIndex][colIndex] || 0; 
       }
       return 0;
     });
@@ -64,17 +64,15 @@ function App() {
         if (!nuevosDatos[row]) {
           nuevosDatos[row] = [];
         }
-        
-        // Evaluar la expresión
         if (typeof newValue === 'string' && newValue.match(/^[0-9+\-*/()\sA-Z]+$/)) {
           try {
             const expresionResuelta = resolverExpresionConNombres(newValue);
             nuevosDatos[row][col] = eval(expresionResuelta);
           } catch (error) {
-            nuevosDatos[row][col] = 'Error'; // Manejo de errores
+            nuevosDatos[row][col] = 'Error'; 
           }
         } else {
-          nuevosDatos[row][col] = newValue; // Mantener el valor original si no es expresión
+          nuevosDatos[row][col] = newValue; 
         }
       });
       setDatos(nuevosDatos);
@@ -128,7 +126,7 @@ function App() {
     {
       name: 'Cambiar nombre de columna',
       callback: (key, selection) => {
-        const colIndex = selection[0].start.col; // Obtener el índice de la columna seleccionada
+        const colIndex = selection[0].start.col;
         cambiarNombreEncabezado(colIndex);
       }
     },
@@ -146,12 +144,41 @@ function App() {
     'redo',
   ];
 
+  // Guardar datos en MongoDB
+  const guardarHoja = async () => {
+    const hoja = {
+      nombre: prompt("Ingrese el nombre de la hoja de cálculo:"),
+      datos: datos,
+      encabezados: encabezados,
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/hoja', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(hoja),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+      } else {
+        alert(result.error);
+      }
+    } catch (error) {
+      console.error('Error al guardar la hoja:', error);
+      alert('Error al guardar la hoja.');
+    }
+  };
+
   return (
     <div>
       <h2>Hoja de Cálculo</h2>
       <button onClick={agregarFila}>Agregar Fila</button>
       <button onClick={agregarColumna}>Agregar Columna</button>
       <button onClick={descargarArchivo}>Descargar archivo</button>
+      <button onClick={guardarHoja}>Guardar</button>
 
       <HotTable 
         ref={hotTableComponent} 
