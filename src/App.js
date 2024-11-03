@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { HotTable } from "@handsontable/react";
 import { registerAllModules } from 'handsontable/registry';
@@ -172,9 +172,61 @@ function App() {
     }
   };
 
+  // Cargar desde la base de datos (bien feito ;y )
+  const [hojas, setHojas] = useState([]);
+  const [seleccion, setSeleccion] = useState('');
+  const cargarHojas = async () => {
+    try {
+        const response = await fetch('http://localhost:5000/hojas');
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor');
+        }
+
+        const hojasData = await response.json();
+        setHojas(hojasData); // Guardamos las hojas en el estado
+    } catch (error) {
+        console.error('Error al cargar las hojas:', error);
+        alert('Error al cargar las hojas.');
+    }
+  };
+
+  const manejarSeleccion = () => {
+      const indiceSeleccionado = parseInt(seleccion);
+      if (indiceSeleccionado >= 0 && indiceSeleccionado < hojas.length) {
+          const hojaSeleccionada = hojas[indiceSeleccionado];
+          setDatos(hojaSeleccionada.datos);
+          setEncabezados(hojaSeleccionada.encabezados);
+      } else {
+          alert("Selección no válida. Por favor, elija un número de la lista.");
+      }
+  };
+
+  
+
   return (
     <div>
       <h2>Hoja de Cálculo</h2>
+     
+      <button onClick={cargarHojas}>Cargar Hoja</button>
+
+            {hojas.length > 0 && (
+                <div>
+                    <label htmlFor="hojaSelect">Seleccione una hoja:</label>
+                    <select
+                        id="hojaSelect"
+                        value={seleccion}
+                        onChange={(e) => setSeleccion(e.target.value)}
+                    >
+                        <option value="">Seleccione...</option>
+                        {hojas.map((h, index) => (
+                            <option key={h.id} value={index}>
+                                {h.nombre}
+                            </option>
+                        ))}
+                    </select>
+                    <button onClick={manejarSeleccion}>Cargar Selección</button>
+                </div>
+            )}
       <button onClick={agregarFila}>Agregar Fila</button>
       <button onClick={agregarColumna}>Agregar Columna</button>
       <button onClick={descargarArchivo}>Descargar archivo</button>
