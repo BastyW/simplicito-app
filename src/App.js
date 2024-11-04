@@ -39,7 +39,7 @@ function App() {
 
   const [datos, setDatos] = useState(cargarDatos());
   const [encabezados, setEncabezados] = useState(cargarEncabezados());
-
+  
   // Guardar cambios en localStorage
   useEffect(() => {
     localStorage.setItem("hojaCalculo", JSON.stringify(datos));
@@ -93,6 +93,7 @@ function App() {
   const crearHojaEnBlanco = () => {
     setDatos([[]]); // Inicializa datos como un array de un array vacío
     setEncabezados(generarEncabezadosAlfabeticos(8)); // Genera encabezados predeterminados
+    setSeleccion(''); 
   };
 
   // Función para descargar archivo
@@ -206,17 +207,20 @@ function App() {
   };
 
   return (
-    <div className="app-container">
-      <h2>Hoja de Cálculo</h2>
+    <div className="container mt-4">
+      <h2 className="mb-4 text-center">Hoja de Cálculo</h2>
 
-      <button onClick={cargarHojas}>Cargar Hoja</button>
-      <button onClick={crearHojaEnBlanco}>Crear Hoja en Blanco</button>
-      
+      <div className="mb-3">
+        <button className="btn btn-primary mr-2" onClick={cargarHojas}>Cargar Hoja</button>
+        <button className="btn btn-success" onClick={crearHojaEnBlanco}>Crear Hoja en Blanco</button>
+      </div>
+
       {hojas.length > 0 && (
-        <div>
-          <label htmlFor="hojaSelect">Seleccione una hoja:</label>
+        <div className="mb-3">
+          <label htmlFor="hojaSelect" className="mr-2">Seleccione una hoja:</label>
           <select
             id="hojaSelect"
+            className="form-control d-inline-block w-auto"
             value={seleccion}
             onChange={(e) => setSeleccion(e.target.value)}
           >
@@ -225,15 +229,15 @@ function App() {
               <option key={h.id} value={index}>{h.nombre}</option>
             ))}
           </select>
-          <button onClick={manejarSeleccion}>Cargar Selección</button>
+          <button className="btn btn-info ml-2" onClick={manejarSeleccion}>Cargar Selección</button>
         </div>
       )}
 
-      <div className="button-group">
-        <button onClick={agregarFila}>Agregar Fila</button>
-        <button onClick={agregarColumna}>Agregar Columna</button>
-        <button onClick={descargarArchivo}>Descargar archivo</button>
-        <button onClick={guardarHoja}>Guardar</button>
+      <div className="button-group mb-3">
+        <button className="btn btn-secondary mr-2" onClick={agregarFila}>Agregar Fila</button>
+        <button className="btn btn-secondary" onClick={agregarColumna}>Agregar Columna</button>
+        <button className="btn btn-warning mx-2" onClick={descargarArchivo}>Descargar archivo</button>
+        <button className="btn btn-danger" onClick={guardarHoja}>Guardar</button>
       </div>
 
       <HotTable 
