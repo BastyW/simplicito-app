@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.hoja-casilla {
+  padding: 20px;
+  text-align: center;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.hoja-casilla:hover {
+  background-color: #e0e0e0;
+}
