@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { HotTable } from "@handsontable/react";
 import "handsontable/dist/handsontable.full.css";
 import { resolverExpresionConNombres } from '../utils/formulas';  
@@ -9,8 +9,7 @@ import { registerLanguageDictionary, esMX } from "handsontable/i18n";
 registerAllModules();
 registerLanguageDictionary(esMX);
 
-function Spreadsheet({ datos, encabezados, setDatos, setEncabezados, manejarSeleccion, hojas, mostrarHoja }) {
-  const hotTableComponent = useRef(null);
+function Spreadsheet({ hotTableComponent, datos, encabezados, setDatos, setEncabezados, manejarSeleccion, hojas, mostrarHoja }) {
 
   // Maneja los cambios en las celdas
   const handleAfterChange = (changes) => {
@@ -52,7 +51,7 @@ function Spreadsheet({ datos, encabezados, setDatos, setEncabezados, manejarSele
     {
       name: 'Cambiar nombre de columna',
       callback: (key, selection) => {
-        const colIndex = selection[0].start.col;  // índice de la columna seleccionada
+        const colIndex = selection[0].start.col;
         cambiarNombreEncabezado(colIndex);
       }
     },
@@ -71,9 +70,9 @@ function Spreadsheet({ datos, encabezados, setDatos, setEncabezados, manejarSele
 
   return mostrarHoja ? (
     <HotTable
-      ref={hotTableComponent}
+      ref={hotTableComponent} 
       data={datos}
-      licenseKey="non-commercial-and-evaluation"  
+      licenseKey="non-commercial-and-evaluation"
       language={esMX.languageCode}
       colHeaders={encabezados}
       rowHeaders={true}

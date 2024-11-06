@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import Spreadsheet from './components/Spreadsheet';
 import HeaderControls from './components/HeaderControls';
@@ -20,6 +20,7 @@ function App() {
   const [mostrarHoja, setMostrarHoja] = useState(cargarMostrarHoja());
   const [hojas, setHojas] = useState([]);
   const [seleccion, setSeleccion] = useState(cargarSeleccion());
+  const hotTableComponent = useRef(null); 
 
   // Cargar las hojas desde la base de datos
   useEffect(() => {
@@ -64,12 +65,29 @@ function App() {
     }
   };
 
+  // Función para descargar archivo
+  const descargarArchivo = () => {
+    if (hotTableComponent.current?.hotInstance) {
+      const pluginDescarga = hotTableComponent.current.hotInstance.getPlugin("exportFile");
+      pluginDescarga.downloadFile("csv", {
+        filename: "hoja_calculo",
+        fileExtension: "csv",
+        mimeType: "text/csv",
+        columnHeaders: true,
+        columnDelimiter: ";",
+        rowHeaders: false,
+      });
+    } else {
+      alert("Error al descargar el archivo. La instancia de Handsontable no está disponible.");
+    }
+  };
+
   return (
     <div className="container mt-4">
       <h2 className="mb-4 text-center">Hoja de Cálculo</h2>
       <HeaderControls
         crearHojaEnBlanco={() => { setDatos([[]]); setEncabezados(cargarEncabezados()); setSeleccion(null); setMostrarHoja(true); }}
-        descargarArchivo={() => {}}
+        descargarArchivo={descargarArchivo}
         guardarHoja={() => guardarHojaDB(datos, encabezados, seleccion, hojas)}
         mostrarHoja={mostrarHoja}
         volverAtras={() => setMostrarHoja(false)}
@@ -77,6 +95,7 @@ function App() {
         agregarColumna={() => setDatos(datos.map(fila => [...fila, '']))}
       />
       <Spreadsheet
+        hotTableComponent={hotTableComponent} 
         datos={datos}
         encabezados={encabezados}
         setDatos={setDatos}
