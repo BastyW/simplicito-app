@@ -94,16 +94,34 @@ function App() {
         agregarFila={() => setDatos([...datos, []])}
         agregarColumna={() => setDatos(datos.map(fila => [...fila, '']))}
       />
-      <Spreadsheet
-        hotTableComponent={hotTableComponent} 
-        datos={datos}
-        encabezados={encabezados}
-        setDatos={setDatos}
-        setEncabezados={setEncabezados}
-        manejarSeleccion={manejarSeleccion}
-        hojas={hojas}
-        mostrarHoja={mostrarHoja}
-      />
+      <div className="grid-container">
+        {!mostrarHoja ? (
+          hojas.length === 0 ? (
+            <p>No hay hojas disponibles. Carga primero las hojas desde el servidor.</p>
+          ) : (
+            hojas.map((hoja, index) => (
+              <div
+                key={hoja.id}
+                className="hoja-casilla"
+                onClick={() => manejarSeleccion(index)}
+              >
+                {hoja.nombre}
+              </div>
+            ))
+          )
+        ) : (
+          <Spreadsheet
+            hotTableComponent={hotTableComponent} 
+            datos={datos}
+            encabezados={encabezados}
+            setDatos={setDatos}
+            setEncabezados={setEncabezados}
+            manejarSeleccion={manejarSeleccion}
+            hojas={hojas}
+            mostrarHoja={mostrarHoja}
+          />
+        )}
+      </div>
     </div>
   );
 }
