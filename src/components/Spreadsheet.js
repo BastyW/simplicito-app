@@ -68,7 +68,7 @@ function Spreadsheet({ hotTableComponent, datos, encabezados, setDatos, setEncab
     'redo',
   ];
 
-  return mostrarHoja ? (
+  return (
     <HotTable
       ref={hotTableComponent} 
       data={datos}
@@ -82,16 +82,7 @@ function Spreadsheet({ hotTableComponent, datos, encabezados, setDatos, setEncab
       autoWrapCol={true}
       afterChange={handleAfterChange}
       contextMenu={contextMenuItems}
-      onContextMenu={(e) => e.preventDefault()}
     />
-  ) : (
-    <div className="grid-container">
-      {hojas.map((hoja, index) => (
-        <div key={index} onClick={() => manejarSeleccion(index)}>
-          {hoja.nombre}
-        </div>
-      ))}
-    </div>
   );
 }
 

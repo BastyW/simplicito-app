@@ -25,14 +25,14 @@ function App() {
   // Cargar las hojas desde la base de datos
   useEffect(() => {
     cargarHojas().then((hojasCargadas) => {
-      setHojas(hojasCargadas);
-      
-      // Si hay una hoja seleccionada, carga sus datos y encabezados
-      if (seleccion !== null && hojasCargadas[seleccion]) {
-        const hojaSeleccionada = hojasCargadas[seleccion];
-        setDatos(hojaSeleccionada.datos);
-        setEncabezados(hojaSeleccionada.encabezados);
-      }
+        setHojas(hojasCargadas);
+        
+        // Si hay una hoja seleccionada, carga sus datos y encabezados
+        if (seleccion !== null && hojasCargadas[seleccion]) {
+            const hojaSeleccionada = hojasCargadas[seleccion];
+            setDatos(hojaSeleccionada.datos);
+            setEncabezados(hojaSeleccionada.encabezados);
+        }
     });
   }, []);
 
@@ -84,46 +84,47 @@ function App() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4 text-center">Hoja de Cálculo</h2>
-      <HeaderControls
-        crearHojaEnBlanco={() => { setDatos([[]]); setEncabezados(cargarEncabezados()); setSeleccion(null); setMostrarHoja(true); }}
-        descargarArchivo={descargarArchivo}
-        guardarHoja={() => guardarHojaDB(datos, encabezados, seleccion, hojas)}
-        mostrarHoja={mostrarHoja}
-        volverAtras={() => setMostrarHoja(false)}
-        agregarFila={() => setDatos([...datos, []])}
-        agregarColumna={() => setDatos(datos.map(fila => [...fila, '']))}
-      />
-      <div className="grid-container">
-        {!mostrarHoja ? (
-          hojas.length === 0 ? (
-            <p>No hay hojas disponibles. Carga primero las hojas desde el servidor.</p>
-          ) : (
-            hojas.map((hoja, index) => (
-              <div
-                key={hoja.id}
-                className="hoja-casilla"
-                onClick={() => manejarSeleccion(index)}
-              >
-                {hoja.nombre}
-              </div>
-            ))
-          )
-        ) : (
-          <Spreadsheet
-            hotTableComponent={hotTableComponent} 
-            datos={datos}
-            encabezados={encabezados}
-            setDatos={setDatos}
-            setEncabezados={setEncabezados}
-            manejarSeleccion={manejarSeleccion}
-            hojas={hojas}
+        <h2 className="mb-4 text-center">Hoja de Cálculo</h2>
+        <HeaderControls
+            crearHojaEnBlanco={() => { setDatos([[]]); setEncabezados(cargarEncabezados()); setSeleccion(null); setMostrarHoja(true); }}
+            descargarArchivo={descargarArchivo}
+            guardarHoja={() => guardarHojaDB(datos, encabezados, seleccion, hojas)}
             mostrarHoja={mostrarHoja}
-          />
-        )}
-      </div>
+            volverAtras={() => setMostrarHoja(false)}
+            agregarFila={() => setDatos([...datos, []])}
+            agregarColumna={() => setDatos(datos.map(fila => [...fila, '']))}
+        />
+        <div className="grid-container">
+            {!mostrarHoja ? (
+                hojas.length === 0 ? (
+                    <p>No hay hojas disponibles. Carga primero las hojas desde el servidor.</p>
+                ) : (
+                    hojas.map((hoja, index) => (
+                        <div
+                            key={hoja.id}
+                            className="hoja-casilla"
+                            onClick={() => manejarSeleccion(index)}
+                        >
+                            <div>{hoja.nombre}</div>
+                            <div>Última modificación: {new Date(hoja.ultimaModificacion).toLocaleString()}</div>
+                        </div>
+                    ))
+                )
+            ) : (
+                <Spreadsheet
+                    hotTableComponent={hotTableComponent} 
+                    datos={datos}
+                    encabezados={encabezados}
+                    setDatos={setDatos}
+                    setEncabezados={setEncabezados}
+                    manejarSeleccion={manejarSeleccion}
+                    hojas={hojas}
+                    mostrarHoja={mostrarHoja}
+                />
+            )}
+        </div>
     </div>
-  );
+);
 }
 
 export default App;

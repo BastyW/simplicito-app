@@ -26,7 +26,8 @@ conectarBD(); // Llama a la función para conectar
 const hojaCalculoSchema = new mongoose.Schema({
     nombre: { type: String, required: true, unique: true }, // nombre de la hoja
     datos: { type: [[String]], required: true },             // datos de las celdas
-    encabezados: { type: [String], required: true }          // encabezados de columnas
+    encabezados: { type: [String], required: true },         // encabezados de columnas
+    ultimaModificacion: { type: Date, default: Date.now }    // fecha de última modificación
 });
 
 // Crear el modelo basado en el esquema
@@ -42,7 +43,12 @@ app.post("/hoja", async (req, res) => {
     const { nombre, datos, encabezados } = req.body;
 
     try {
-        const nuevaHoja = new HojaCalculo({ nombre, datos, encabezados });
+        const nuevaHoja = new HojaCalculo({
+            nombre,
+            datos,
+            encabezados,
+            ultimaModificacion: new Date()
+        });
         await nuevaHoja.save();
         res.status(201).json({ message: "Hoja de cálculo creada exitosamente", hoja: nuevaHoja });
     } catch (error) {
@@ -82,7 +88,7 @@ app.put("/hoja/:nombre", async (req, res) => {
     try {
         const hojaActualizada = await HojaCalculo.findOneAndUpdate(
             { nombre },
-            { datos, encabezados },
+            { datos, encabezados, ultimaModificacion: new Date() },
             { new: true }
         );
         if (!hojaActualizada) {
