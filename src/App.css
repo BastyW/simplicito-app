@@ -40,24 +40,107 @@
 
 
 
-.container {
+/* Contenedor general */
+.app-container {
+  display: flex;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Barra lateral */
+.sidebar {
+  background-color: #eaf5db;
+  width: 200px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+.sidebar h2 {
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 16px;
+  color: #333;
+  margin-bottom: 20px;
 }
 
+.crear-proyecto-btn {
+  background-color: #66b84e;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 20px;
+  text-align: center;
+}
 
+.crear-proyecto-btn:hover {
+  background-color: #5ca445;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.sidebar nav ul li {
+  padding: 10px;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar nav ul li:hover {
+  background-color: #d8eac6;
+  border-radius: 5px;
+}
+
+/* Contenido principal */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+/* Secciones de contenido */
+.content-sections {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Proyectos recientes */
+.recent-projects {
+  width: 60%;
+}
+
+.recent-projects h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tarjeta de proyecto */
 .hoja-casilla {
   display: flex;
   align-items: center;
-  width: 100%;
-  max-width: 400px;
   padding: 12px;
   margin-bottom: 12px;
   border: 1px solid #ddd;
@@ -77,9 +160,6 @@ h2 {
   background-color: #f4f4f4;
   border: 1px solid #ddd;
   margin-right: 12px;
-  /* background-image: url('/.png');*/
-  background-size: cover;
-  background-position: center;
   border-radius: 4px;
 }
 
@@ -97,4 +177,50 @@ h2 {
 .hoja-fecha {
   font-size: 14px;
   color: #777;
+}
+
+/* Sección de previsualización */
+.preview-section {
+  width: 35%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-section h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.preview-placeholder {
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-image {
+  width: 80%;
+  height: 150px;
+  background-color: #b6dba4;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
+.preview-button {
+  background-color: #66b84e;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.preview-button:hover {
+  background-color: #5ca445;
 }

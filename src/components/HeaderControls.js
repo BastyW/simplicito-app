@@ -4,7 +4,7 @@ function HeaderControls({ crearHojaEnBlanco, descargarArchivo, guardarHoja, most
   return (
     <div className="mb-3">
       {!mostrarHoja ? (
-        <button className="btn btn-success" onClick={crearHojaEnBlanco}>Crear Hoja en Blanco</button>
+        <></>
       ) : (
         <>
           <button className="btn btn-secondary" onClick={volverAtras}>Volver atrás</button>

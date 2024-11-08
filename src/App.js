@@ -83,46 +83,102 @@ function App() {
   };
 
   return (
-    <div className="container mt-4">
-        <h2 className="mb-4 text-center">Proyectos recientes</h2>
-        <HeaderControls
-            crearHojaEnBlanco={() => { setDatos([[]]); setEncabezados(cargarEncabezados()); setSeleccion(null); setMostrarHoja(true); }}
-            descargarArchivo={descargarArchivo}
-            guardarHoja={() => guardarHojaDB(datos, encabezados, seleccion, hojas)}
-            mostrarHoja={mostrarHoja}
-            volverAtras={() => setMostrarHoja(false)}
-            agregarFila={() => setDatos([...datos, []])}
-            agregarColumna={() => setDatos(datos.map(fila => [...fila, '']))}
-        />
-        
-        <div className="grid-container">
-            {!mostrarHoja ? (
-                hojas.length === 0 ? (
-                    <p>No hay hojas disponibles. Carga primero las hojas desde el servidor.</p>
-                ) : (
-                    hojas.map((hoja, index) => (
-                        <div
-                            key={hoja.id}
-                            className="hoja-casilla"
-                            onClick={() => manejarSeleccion(index)}
-                        >
-                            <div className="hoja-icono"></div>
-                            <div className="hoja-info">
-                                <div className="hoja-nombre">{hoja.nombre}</div>
-                                <div className="hoja-fecha">
-                                    Fecha de modificación: {new Date(hoja.ultimaModificacion).toLocaleDateString('es-ES', {
-                                        day: '2-digit',
-                                        month: 'long',
-                                        year: 'numeric'
-                                    })}
-                                </div>
-                            </div>
+    <div className="app-container">
+        {/* Barra lateral */}
+        <aside className="sidebar">
+            <h2>Simplicito</h2>
+            <button className="crear-proyecto-btn" onClick={() => { 
+                setDatos([[]]); 
+                setEncabezados([]); 
+                setSeleccion(null); 
+                setMostrarHoja(true);
+            }}>
+                Crear proyecto
+            </button>
+            <nav>
+                <ul>
+                    <li>Proyectos recientes</li>
+                    <li>Opciones</li>
+                    <li>Acerca de la app</li>
+                </ul>
+            </nav>
+        </aside>
+
+        {/* Contenido principal */}
+        <main className="main-content">
+            <header className="header">
+                <h2>¡Buenas tardes, Usuario!</h2>
+            </header>
+
+            <div className="content-sections">
+
+                {!mostrarHoja && (
+                    <section className="recent-projects">
+                        <h3>Proyectos recientes</h3>
+                        <div className="projects-list">
+                            {hojas.length === 0 ? (
+                                <p>No hay hojas disponibles. Carga primero las hojas desde el servidor.</p>
+                            ) : (
+                                hojas.map((hoja, index) => (
+                                    <div
+                                        key={hoja.id}
+                                        className="hoja-casilla"
+                                        onClick={() => manejarSeleccion(index)}
+                                    >
+                                        <div className="hoja-icono"></div>
+                                        <div className="hoja-info">
+                                            <div className="hoja-nombre">{hoja.nombre}</div>
+                                            <div className="hoja-fecha">
+                                                Fecha de modificación: {new Date(hoja.ultimaModificacion).toLocaleDateString('es-ES', {
+                                                    day: '2-digit',
+                                                    month: 'long',
+                                                    year: 'numeric'
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                         </div>
-                    ))
-                )
-            ) : (
+                    </section>
+                )}
+                
+                {!mostrarHoja && (
+                    <section className="preview-section">
+                        <h3>Previsualización</h3>
+                        <div className="preview-placeholder">
+                            <div className="preview-image"></div>
+                            <button 
+                                className="preview-button" 
+                                onClick={() => setMostrarHoja(true)}
+                            >
+                                Resumir proyecto
+                            </button>
+                        </div>
+                    </section>
+                )}
+            </div>
+
+            {/* Controles de encabezado y hoja de cálculo */}
+            <HeaderControls
+                crearHojaEnBlanco={() => { 
+                    setDatos([[]]); 
+                    setEncabezados([]); 
+                    setSeleccion(null); 
+                    setMostrarHoja(true); 
+                }}
+                descargarArchivo={descargarArchivo}
+                guardarHoja={() => guardarHojaDB(datos, encabezados, seleccion, hojas)}
+                mostrarHoja={mostrarHoja}
+                volverAtras={() => setMostrarHoja(false)}
+                agregarFila={() => setDatos([...datos, []])}
+                agregarColumna={() => setDatos(datos.map(fila => [...fila, '']))}
+            />
+
+            {/* Mostrar hoja de cálculo seleccionada */}
+            {mostrarHoja && (
                 <Spreadsheet
-                    hotTableComponent={hotTableComponent} 
+                    hotTableComponent={hotTableComponent}
                     datos={datos}
                     encabezados={encabezados}
                     setDatos={setDatos}
@@ -132,10 +188,9 @@ function App() {
                     mostrarHoja={mostrarHoja}
                 />
             )}
-        </div>
+        </main>
     </div>
-);
-
+  );
 }
 
 export default App;
