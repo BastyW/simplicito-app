@@ -40,22 +40,61 @@
 
 
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 16px;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+
 .hoja-casilla {
-  padding: 20px;
-  text-align: center;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
   border-radius: 8px;
+  background-color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: box-shadow 0.3s ease;
 }
 
 .hoja-casilla:hover {
-  background-color: #e0e0e0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.hoja-icono {
+  width: 40px;
+  height: 40px;
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  margin-right: 12px;
+  /* background-image: url('/.png');*/
+  background-size: cover;
+  background-position: center;
+  border-radius: 4px;
+}
+
+.hoja-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.hoja-nombre {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+.hoja-fecha {
+  font-size: 14px;
+  color: #777;
 }

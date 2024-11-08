@@ -84,7 +84,7 @@ function App() {
 
   return (
     <div className="container mt-4">
-        <h2 className="mb-4 text-center">Hoja de Cálculo</h2>
+        <h2 className="mb-4 text-center">Proyectos recientes</h2>
         <HeaderControls
             crearHojaEnBlanco={() => { setDatos([[]]); setEncabezados(cargarEncabezados()); setSeleccion(null); setMostrarHoja(true); }}
             descargarArchivo={descargarArchivo}
@@ -94,6 +94,7 @@ function App() {
             agregarFila={() => setDatos([...datos, []])}
             agregarColumna={() => setDatos(datos.map(fila => [...fila, '']))}
         />
+        
         <div className="grid-container">
             {!mostrarHoja ? (
                 hojas.length === 0 ? (
@@ -105,8 +106,17 @@ function App() {
                             className="hoja-casilla"
                             onClick={() => manejarSeleccion(index)}
                         >
-                            <div>{hoja.nombre}</div>
-                            <div>Última modificación: {new Date(hoja.ultimaModificacion).toLocaleString()}</div>
+                            <div className="hoja-icono"></div>
+                            <div className="hoja-info">
+                                <div className="hoja-nombre">{hoja.nombre}</div>
+                                <div className="hoja-fecha">
+                                    Fecha de modificación: {new Date(hoja.ultimaModificacion).toLocaleDateString('es-ES', {
+                                        day: '2-digit',
+                                        month: 'long',
+                                        year: 'numeric'
+                                    })}
+                                </div>
+                            </div>
                         </div>
                     ))
                 )
@@ -125,6 +135,7 @@ function App() {
         </div>
     </div>
 );
+
 }
 
 export default App;
