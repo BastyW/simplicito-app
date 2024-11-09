@@ -85,7 +85,8 @@ function App() {
   return (
     <div className="app-container">
         {/* Barra lateral */}
-        <aside className="sidebar">
+        {!mostrarHoja && (
+          <aside className="sidebar">
             <h2>Simplicito</h2>
             <button className="crear-proyecto-btn" onClick={() => { 
                 setDatos([[]]); 
@@ -103,9 +104,10 @@ function App() {
                 </ul>
             </nav>
         </aside>
+        )}
 
         {/* Contenido principal */}
-        <main className="main-content">
+        <main className={`main-content ${mostrarHoja ? 'full-width' : ''}`}>
             <header className="header">
                 <h2>¡Buenas tardes, Usuario!</h2>
             </header>
@@ -177,16 +179,18 @@ function App() {
 
             {/* Mostrar hoja de cálculo seleccionada */}
             {mostrarHoja && (
-                <Spreadsheet
-                    hotTableComponent={hotTableComponent}
-                    datos={datos}
-                    encabezados={encabezados}
-                    setDatos={setDatos}
-                    setEncabezados={setEncabezados}
-                    manejarSeleccion={manejarSeleccion}
-                    hojas={hojas}
-                    mostrarHoja={mostrarHoja}
-                />
+                <div className='spreadsheet-container'>
+                    <Spreadsheet
+                        hotTableComponent={hotTableComponent}
+                        datos={datos}
+                        encabezados={encabezados}
+                        setDatos={setDatos}
+                        setEncabezados={setEncabezados}
+                        manejarSeleccion={manejarSeleccion}
+                        hojas={hojas}
+                        mostrarHoja={mostrarHoja}
+                    />
+                </div>    
             )}
         </main>
     </div>

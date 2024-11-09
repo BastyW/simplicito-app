@@ -224,3 +224,29 @@
 .preview-button:hover {
   background-color: #5ca445;
 }
+
+
+/* Opciones en edición */
+.spreadsheet-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.header-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 0 20px;
+}
+
+.left-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.right-controls {
+  display: flex;
+  gap: 10px;
+}
