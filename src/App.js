@@ -21,6 +21,8 @@ function App() {
   const [hojas, setHojas] = useState([]);
   const [seleccion, setSeleccion] = useState(cargarSeleccion());
   const hotTableComponent = useRef(null); 
+  const [previewData, setPreviewData] = useState(null);
+  const [previewIndex, setPreviewIndex] = useState(null);
 
   // Cargar las hojas desde la base de datos
   useEffect(() => {
@@ -82,6 +84,21 @@ function App() {
     }
   };
 
+  const manejarPrevisualizacion = (index) => {
+    if (index >= 0 && index < hojas.length) {
+      const hojaSeleccionada = hojas[index];
+      const datosRecortados = hojaSeleccionada.datos.slice(0, 3).map(fila => fila.slice(0, 4)); // Máx. 3 filas y 4 columnas
+      const encabezadosRecortados = hojaSeleccionada.encabezados.slice(0, 4); // Máx. 4 encabezados
+  
+      setPreviewData({
+        nombre: hojaSeleccionada.nombre,
+        encabezados: encabezadosRecortados,
+        datos: datosRecortados,
+      });
+      setPreviewIndex(index);
+    }
+  };
+
   return (
     <div className="app-container">
         {/* Barra lateral */}
@@ -108,7 +125,7 @@ function App() {
 
         {/* Contenido principal */}
         <main className={`main-content ${mostrarHoja ? 'full-width' : ''}`}>
-            <header className="header">
+            <header className="header ">
                 <h2>¡Buenas tardes, Usuario!</h2>
             </header>
 
@@ -125,7 +142,8 @@ function App() {
                                     <div
                                         key={hoja.id}
                                         className="hoja-casilla"
-                                        onClick={() => manejarSeleccion(index)}
+                                        onClick={() => manejarPrevisualizacion(index)}
+                                        onDoubleClick={() => manejarSeleccion(index)}
                                     >
                                         <div className="hoja-icono"></div>
                                         <div className="hoja-info">
@@ -147,17 +165,45 @@ function App() {
                 
                 {!mostrarHoja && (
                     <section className="preview-section">
-                        <h3>Previsualización</h3>
-                        <div className="preview-placeholder">
-                            <div className="preview-image"></div>
-                            <button 
-                                className="preview-button" 
-                                onClick={() => setMostrarHoja(true)}
-                            >
-                                Resumir proyecto
-                            </button>
-                        </div>
-                    </section>
+                    <h3>Previsualización</h3>
+                    {previewData ? (
+                      <div className="preview-content">
+                        <h4>{previewData.nombre}</h4>
+                        <table className="preview-table">
+                          <thead>
+                            <tr>
+                              {previewData.encabezados.map((header, index) => (
+                                <th key={index}>{header}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {previewData.datos.map((fila, index) => (
+                              <tr key={index}>
+                                {fila.map((celda, i) => (
+                                  <td key={i}>{celda}</td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                        <button 
+                            className="preview-button" 
+                            onClick={() => {
+                            if (previewIndex !== null) {
+                                manejarSeleccion(previewIndex); // Carga la hoja completa
+                                setMostrarHoja(true);          // Muestra la hoja
+                            } else {
+                                alert("Selecciona una hoja para abrir.");
+                            }
+                            }}>
+                            Abrir
+                        </button>
+                      </div>                      
+                    ) : (
+                      <p>Selecciona una hoja para previsualizarla.</p>
+                    )}
+                  </section>
                 )}
             </div>
 

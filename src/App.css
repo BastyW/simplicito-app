@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #66b84e;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,6 +22,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  width: 100%;
 }
 
 .App-link {
@@ -45,7 +46,7 @@
   display: flex;
   height: 100%;
   font-family: Arial, sans-serif;
-  color: #333;
+  color: #333;  
 }
 
 /* Barra lateral */
@@ -180,6 +181,31 @@
 }
 
 /* Sección de previsualización */
+.preview-content {
+  border: 1px solid #ddd;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.preview-table th, .preview-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.preview-table th {
+  background: #f0f0f0;
+  font-weight: bold;
+}
+
+
 .preview-section {
   width: 35%;
   display: flex;
