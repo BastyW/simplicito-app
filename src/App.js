@@ -20,6 +20,7 @@ function App() {
   const [mostrarHoja, setMostrarHoja] = useState(cargarMostrarHoja());
   const [hojas, setHojas] = useState([]);
   const [seleccion, setSeleccion] = useState(cargarSeleccion());
+  const [nombreHoja, setNombreHoja] = useState("");
   const hotTableComponent = useRef(null); 
   const [previewData, setPreviewData] = useState(null);
   const [previewIndex, setPreviewIndex] = useState(null);
@@ -34,9 +35,10 @@ function App() {
             const hojaSeleccionada = hojasCargadas[seleccion];
             setDatos(hojaSeleccionada.datos);
             setEncabezados(hojaSeleccionada.encabezados);
+            setNombreHoja(hojaSeleccionada.nombre);
         }
     });
-  }, []);
+  }, [seleccion]);
 
   // Guarda datos y encabezados en localStorage cuando cambian
   useEffect(() => {
@@ -61,6 +63,7 @@ function App() {
       setDatos(hojaSeleccionada.datos);
       setEncabezados(hojaSeleccionada.encabezados);
       setSeleccion(index);
+      setNombreHoja(hojaSeleccionada.nombre); 
       setMostrarHoja(true);
     } else {
       alert("Selección no válida.");
@@ -125,12 +128,15 @@ function App() {
 
         {/* Contenido principal */}
         <main className={`main-content ${mostrarHoja ? 'full-width' : ''}`}>
-            <header className="header ">
-                <h2>¡Buenas tardes, Usuario!</h2>
+            <header className="header">
+                {mostrarHoja ? (
+                    <h2>Estás editando: {nombreHoja}</h2> 
+                ) : (
+                    <h2>¡Buenas tardes, Usuario!</h2>
+                )}
             </header>
 
             <div className="content-sections">
-
                 {!mostrarHoja && (
                     <section className="recent-projects">
                         <h3>Proyectos recientes</h3>
@@ -199,7 +205,7 @@ function App() {
                             }}>
                             Abrir
                         </button>
-                      </div>                      
+                      </div>                       
                     ) : (
                       <p>Selecciona una hoja para previsualizarla.</p>
                     )}
@@ -213,6 +219,7 @@ function App() {
                     setDatos([[]]); 
                     setEncabezados([]); 
                     setSeleccion(null); 
+                    setNombreHoja(""); 
                     setMostrarHoja(true); 
                 }}
                 descargarArchivo={descargarArchivo}
